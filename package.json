@@ -1,0 +1,31 @@
+{
+  "name": "create-geo-next",
+  "module": "src/index.ts",
+  "type": "module",
+  "description": "A custom Next.js starter CLI",
+  "bin": {
+    "create-geo-next": "src/index.ts"
+  },
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target node",
+    "start": "bun run dist/index.js"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "type-fest": "^3.13.1",
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "@clack/core": "^0.3.4",
+    "@clack/prompts": "^0.6.3",
+    "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
+    "commander": "^10.0.1",
+    "execa": "^7.2.0",
+    "fs-extra": "^11.2.0",
+    "gradient-string": "^2.0.2",
+    "ora": "6.3.1",
+    "sort-package-json": "^2.10.0"
+  }
+}
