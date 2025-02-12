@@ -3,6 +3,8 @@ import {getNpmVersion, renderVersionWarning} from "./utils/renderVersionWarning"
 import {getUserPkgManager} from "./utils/getUserPkgManager";
 import {renderTitle} from "./utils/renderTitle";
 import {runCli} from "./cli";
+import {buildPkgInstallerMap} from "./installers";
+import {parseNameAndPath} from "./utils/parseNameAndPath.ts";
 
 async function main() {
     // const npmVersion = await getNpmVersion();
@@ -19,7 +21,10 @@ async function main() {
         flags: {noGit, noInstall, importAlias},
         databaseProvider,
     } = await runCli();
-    console.log("APPNAME", appName, packages, noGit, noInstall, importAlias, databaseProvider);
+    const usePackages = buildPkgInstallerMap(packages, databaseProvider);
+
+    // e.g. dir/@mono/app returns ["@mono/app", "dir/app"]
+    const [scopedAppName, appDir] = parseNameAndPath(appName);
 //     console.log(chalk.cyan("✨ Welcome to the Next.js Starter CLI!"));
 //     // 交互式选择
 //     const response = await prompts([

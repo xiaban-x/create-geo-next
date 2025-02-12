@@ -2,9 +2,9 @@ import path from "path";
 import fs from "fs-extra";
 import { type PackageJson } from "type-fest";
 
-import { PKG_ROOT } from "~/consts";
-import { type Installer } from "~/installers/index.js";
-import { addPackageDependency } from "~/utils/addPackageDependency.js";
+import { PKG_ROOT } from "../consts";
+import { type Installer } from "./index";
+import { addPackageDependency } from "../utils/addPackageDependency";
 
 export const tailwindInstaller: Installer = ({ projectDir }) => {
   addPackageDependency({

@@ -7,7 +7,7 @@ import {type Installer} from "./index";
 import {addPackageDependency} from "../utils/addPackageDependency";
 import {type AvailableDependencies} from "./dependencyVersionMap";
 
-export const drizzleInstaller: Installer = ({
+export const openLayersInstaller: Installer = ({
                                                 projectDir,
                                                 packages,
                                                 scopedAppName,
