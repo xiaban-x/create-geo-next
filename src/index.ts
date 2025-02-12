@@ -1,15 +1,25 @@
 #!/usr/bin/env bun
-import {getNpmVersion, renderVersionWarning} from "./utils/renderVersionWarning.ts";
-import {getUserPkgManager} from "./utils/getUserPkgManager.ts";
-import {renderTitle} from "./utils/renderTitle.ts";
+import {getNpmVersion, renderVersionWarning} from "./utils/renderVersionWarning";
+import {getUserPkgManager} from "./utils/getUserPkgManager";
+import {renderTitle} from "./utils/renderTitle";
+import {runCli} from "./cli";
 
 async function main() {
-    const npmVersion = await getNpmVersion();
+    // const npmVersion = await getNpmVersion();
+    const npmVersion = "0.0.1";
     const pkgManager = getUserPkgManager();
     renderTitle();
     if (npmVersion) {
         renderVersionWarning(npmVersion);
     }
+
+    const {
+        appName,
+        packages,
+        flags: {noGit, noInstall, importAlias},
+        databaseProvider,
+    } = await runCli();
+    console.log("APPNAME", appName, packages, noGit, noInstall, importAlias, databaseProvider);
 //     console.log(chalk.cyan("✨ Welcome to the Next.js Starter CLI!"));
 //     // 交互式选择
 //     const response = await prompts([
