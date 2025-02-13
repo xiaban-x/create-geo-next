@@ -34,15 +34,9 @@ export const selectPageFile = ({
                                    packages,
                                }: SelectBoilerplateProps) => {
     const indexFileDir = path.join(PKG_ROOT, "template/extras/src/app/page");
-    const usingTw = packages.tailwind.inUse;
-    const usingUno = packages.unocss.inUse;
     const usingMaplibre = packages.maplibre.inUse
     let indexFile = "base.tsx";
-    if (usingTw && usingMaplibre) {
-        indexFile = "with-maplibre-tw.tsx";
-    } else if (usingUno && usingMaplibre) {
-        indexFile = "with-maplibre-uno.tsx";
-    } else if (!usingTw && !usingUno && usingMaplibre) {
+    if (usingMaplibre) {
         indexFile = "with-maplibre.tsx";
     }
 

@@ -47,7 +47,6 @@ async function main() {
         importAlias,
         noInstall,
     });
-    console.log("projectDir ==>", projectDir)
     // Write name to package.json
     const pkgJson = fs.readJSONSync(
         path.join(projectDir, "package.json")

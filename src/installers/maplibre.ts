@@ -23,4 +23,23 @@ export const maplibreInstaller: Installer = ({
         dependencies: devPackages,
         devMode: true,
     });
+
+    const extrasDir = path.join(PKG_ROOT, "template/extras");
+
+    const copySrcDest: [string, string][] = [];
+
+    copySrcDest.push(
+        [
+            path.join(
+                extrasDir,
+                "src/app/_components",
+                packages?.tailwind.inUse ? "map-maplibre-tw.tsx" : packages?.unocss.inUse ? "map-maplibre-uno.tsx" : "map-maplibre.tsx"
+            ),
+            path.join(projectDir, "src/app/_components/map-container.tsx"),
+        ],
+    );
+
+    copySrcDest.forEach(([src, dest]) => {
+        fs.copySync(src, dest);
+    });
 };
