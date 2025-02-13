@@ -11,6 +11,7 @@ import path from "path";
 import {getVersion} from "./utils/getVersion.ts";
 import {execa} from "execa";
 import type {PackageJson} from "type-fest";
+import {setImportAlias} from "./helpers/setImportAlias.ts";
 type CGNPackageJSON = PackageJson & {
     cgnMetadata?: {
         initVersion: string;
@@ -64,6 +65,11 @@ async function main() {
     fs.writeJSONSync(path.join(projectDir, "package.json"), pkgJson, {
         spaces: 2,
     });
+
+    // update import alias in any generated files if not using the default
+    if (importAlias !== "~/") {
+        setImportAlias(projectDir, importAlias);
+    }
 }
 
 main();
