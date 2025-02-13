@@ -41,7 +41,6 @@ export interface InstallerOptions {
     pkgManager: PackageManager;
     noInstall: boolean;
     packages?: PkgInstallerMap;
-    appRouter?: boolean;
     projectName: string;
     scopedAppName: string;
     databaseProvider: DatabaseProvider;

@@ -1,8 +1,8 @@
 import path from "path";
 import fs from "fs-extra";
 
-import { _initialConfig } from "~/../template/extras/config/_eslint.js";
-import { type Installer } from "./index";
+import { _initialConfig } from "../../template/extras/config/_eslint.js";
+    import { type Installer } from "./index";
 
 export const dynamicEslintInstaller: Installer = ({ projectDir, packages }) => {
   const usingDrizzle = !!packages?.drizzle?.inUse;
