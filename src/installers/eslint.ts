@@ -1,42 +1,26 @@
 import path from "path";
 import fs from "fs-extra";
 
-import { _initialConfig } from "../../template/extras/config/_eslint.js";
-    import { type Installer } from "./index";
+import {type Installer} from "./index";
+import {PKG_ROOT} from "../consts.ts";
+import {addPackageDependency} from "../utils/addPackageDependency.ts";
 
-export const dynamicEslintInstaller: Installer = ({ projectDir, packages }) => {
-  const usingDrizzle = !!packages?.drizzle?.inUse;
+export const eslintInstaller: Installer = ({projectDir, packages}) => {
+    // addPackageDependency({
+    //     projectDir,
+    //     dependencies: [
+    //         "eslint-plugin-react-hooks",
+    //         "eslint-plugin-react-refresh",
+    //         "eslint-config-next",
+    //         "globals",
+    //         "@eslint/js",
+    //         "@eslint/eslintrc"
+    //     ],
+    //     devMode: true,
+    // });
+    const extrasDir = path.join(PKG_ROOT, "template/extras");
 
-  const eslintConfig = getEslintConfig({ usingDrizzle });
-
-  // Convert config from _eslint.config.json to .eslintrc.cjs
-  const eslintrcFileContents = [
-    '/** @type {import("eslint").Linter.Config} */',
-    `const config = ${JSON.stringify(eslintConfig, null, 2)}`,
-    "module.exports = config;",
-  ].join("\n");
-
-  const eslintConfigDest = path.join(projectDir, ".eslintrc.cjs");
-  fs.writeFileSync(eslintConfigDest, eslintrcFileContents, "utf-8");
-};
-
-const getEslintConfig = ({ usingDrizzle }: { usingDrizzle: boolean }) => {
-  const eslintConfig = _initialConfig;
-
-  if (usingDrizzle) {
-    eslintConfig.plugins = [...(eslintConfig.plugins ?? []), "drizzle"];
-
-    eslintConfig.rules = {
-      ...eslintConfig.rules,
-      "drizzle/enforce-delete-with-where": [
-        "error",
-        { drizzleObjectName: ["db", "ctx.db"] },
-      ],
-      "drizzle/enforce-update-with-where": [
-        "error",
-        { drizzleObjectName: ["db", "ctx.db"] },
-      ],
-    };
-  }
-  return eslintConfig;
+    const eslintConfigSrc = path.join(extrasDir, "config/eslint.config.mjs")
+    const eslintConfigDest = path.join(projectDir, "eslint.config.mjs");
+    fs.copyFileSync(eslintConfigSrc, eslintConfigDest);
 };

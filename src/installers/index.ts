@@ -4,7 +4,7 @@ import {drizzleInstaller} from "./drizzle.ts";
 import {tailwindInstaller} from "./tailwind.ts";
 import {dbContainerInstaller} from "./dbContainer.ts";
 import {envVariablesInstaller} from "./envVars.ts";
-import {dynamicEslintInstaller} from "./eslint.ts";
+import {eslintInstaller} from "./eslint.ts";
 import {unocssInstaller} from "./unocss.ts";
 import {maplibreInstaller} from "./maplibre.ts";
 import {mapboxInstaller} from "./mapbox.ts";
@@ -101,6 +101,6 @@ export const buildPkgInstallerMap = (
     },
     eslint: {
         inUse: true,
-        installer: dynamicEslintInstaller,
+        installer: eslintInstaller,
     },
 });

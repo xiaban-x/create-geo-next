@@ -3,6 +3,13 @@
  * This improves performance significantly over fetching it from the npm registry.
  */
 export const dependencyVersionMap = {
+    // "eslint-plugin-react-hooks": "^5.0.0",
+    // "eslint-plugin-react-refresh": "^0.4.18",
+    // "eslint-config-next": "15.1.7",
+    // "@eslint/eslintrc": "^3",
+    // "globals": "^15.14.0",
+    // "@eslint/js": "^9.19.0",
+
     // maplibre
     "maplibre-gl": "^5.1.0",
     "react-map-gl": "^8.0.1",
@@ -26,6 +33,10 @@ export const dependencyVersionMap = {
     prettier: "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
 
+    // UnoCSS
+    "unocss": "^65.4.3",
+    "@unocss/postcss": "^65.4.3",
+    "@unocss/preset-attributify": "^65.4.3",
 
     superjson: "^2.2.1",
     "server-only": "^0.0.1",
