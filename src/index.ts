@@ -14,6 +14,8 @@ import type {PackageJson} from "type-fest";
 import {setImportAlias} from "./helpers/setImportAlias.ts";
 import {installDependencies} from "./helpers/installDependencies.ts";
 import {initializeGit} from "./helpers/git.ts";
+import {logNextSteps} from "./helpers/logNextSteps.ts";
+import {logger} from "./utils/logger.ts";
 type CGNPackageJSON = PackageJson & {
     cgnMetadata?: {
         initVersion: string;
@@ -78,6 +80,27 @@ async function main() {
     if (!noGit) {
         await initializeGit(projectDir);
     }
+
+    await logNextSteps({
+        projectName: appDir,
+        packages: usePackages,
+        noInstall,
+        projectDir,
+        databaseProvider,
+    });
+
+    process.exit(0);
 }
 
-main();
+main().catch((err) => {
+    logger.error("Aborting installation...");
+    if (err instanceof Error) {
+        logger.error(err);
+    } else {
+        logger.error(
+            "An unknown error has occurred. Please open an issue on github with the below:"
+        );
+        console.log(err);
+    }
+    process.exit(1);
+});
