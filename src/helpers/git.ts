@@ -1,12 +1,12 @@
-import { execSync } from "child_process";
+import {execSync} from "child_process";
 import path from "path";
 import * as p from "@clack/prompts";
 import chalk from "chalk";
-import { execa } from "execa";
+import {execa} from "execa";
 import fs from "fs-extra";
 import ora from "ora";
 
-import { logger } from "../utils/logger";
+import {logger} from "../utils/logger";
 
 const isGitInstalled = (dir: string): boolean => {
   try {
@@ -47,11 +47,9 @@ const getGitVersion = () => {
 
 /** @returns The git config value of "init.defaultBranch". If it is not set, returns "main". */
 const getDefaultBranch = () => {
-  const stdout = execSync("git config --global init.defaultBranch || echo main")
-    .toString()
-    .trim();
-
-  return stdout;
+  return execSync("git config --global init.defaultBranch || echo main")
+      .toString()
+      .trim();
 };
 
 // This initializes the Git-repository for the project
