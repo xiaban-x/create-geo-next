@@ -13,6 +13,7 @@ import {execa} from "execa";
 import type {PackageJson} from "type-fest";
 import {setImportAlias} from "./helpers/setImportAlias.ts";
 import {installDependencies} from "./helpers/installDependencies.ts";
+import {initializeGit} from "./helpers/git.ts";
 type CGNPackageJSON = PackageJson & {
     cgnMetadata?: {
         initVersion: string;
@@ -35,8 +36,7 @@ async function main() {
         databaseProvider,
     } = await runCli();
     const usePackages = buildPkgInstallerMap(packages, databaseProvider);
-    console.log("usePakc= ===>", usePackages)
-    // e.g. dir/@mono/app returns ["@mono/app", "dir/app"]
+
     const [scopedAppName, appDir] = parseNameAndPath(appName);
 
     const projectDir = await createProject({
@@ -73,6 +73,10 @@ async function main() {
 
     if (!noInstall) {
         await installDependencies({ projectDir });
+    }
+
+    if (!noGit) {
+        await initializeGit(projectDir);
     }
 }
 
