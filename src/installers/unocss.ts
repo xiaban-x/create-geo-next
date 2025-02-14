@@ -10,27 +10,30 @@ export const unocssInstaller: Installer = ({projectDir}) => {
     addPackageDependency({
         projectDir,
         dependencies: [
-            "tailwindcss",
-            "postcss",
-            "prettier",
-            "prettier-plugin-tailwindcss",
+            "unocss",
+            "@unocss/preset-attributify",
+            "@unocss/postcss",
+            "prettier-plugin-tailwindcss"
         ],
         devMode: true,
     });
 
     const extrasDir = path.join(PKG_ROOT, "template/extras");
 
-    const twCfgSrc = path.join(extrasDir, "config/unocss.config.ts");
-    const twCfgDest = path.join(projectDir, "unocss.config.ts");
+    const twCfgSrc = path.join(extrasDir, "config/uno.config.ts");
+    const twCfgDest = path.join(projectDir, "uno.config.ts");
 
-    const postcssCfgSrc = path.join(extrasDir, "config/postcss.config.js");
+    const postcssCfgSrc = path.join(extrasDir, "config/postcss-uno.config.js");
     const postcssCfgDest = path.join(projectDir, "postcss.config.js");
 
     const prettierSrc = path.join(extrasDir, "config/_prettier.config.js");
     const prettierDest = path.join(projectDir, "prettier.config.js");
 
-    const cssSrc = path.join(extrasDir, "src/styles/globals.css");
+    const cssSrc = path.join(extrasDir, "src/styles/globals-uno.css");
     const cssDest = path.join(projectDir, "src/styles/globals.css");
+
+    const typesSrc = path.join(extrasDir, "src/utils/uno-attributify.d.ts");
+    const typesDest = path.join(projectDir, "types/uno-attributify.d.ts");
 
     // add format:* scripts to package.json
     const packageJsonPath = path.join(projectDir, "package.json");
@@ -45,6 +48,7 @@ export const unocssInstaller: Installer = ({projectDir}) => {
     fs.copySync(twCfgSrc, twCfgDest);
     fs.copySync(postcssCfgSrc, postcssCfgDest);
     fs.copySync(cssSrc, cssDest);
+    fs.copySync(typesSrc, typesDest);
     fs.copySync(prettierSrc, prettierDest);
     fs.writeJSONSync(packageJsonPath, packageJsonContent, {
         spaces: 2,

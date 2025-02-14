@@ -23,13 +23,13 @@ export const tailwindInstaller: Installer = ({ projectDir }) => {
   const twCfgSrc = path.join(extrasDir, "config/tailwind.config.ts");
   const twCfgDest = path.join(projectDir, "tailwind.config.ts");
 
-  const postcssCfgSrc = path.join(extrasDir, "config/postcss.config.js");
+  const postcssCfgSrc = path.join(extrasDir, "config/postcss-tw.config.js");
   const postcssCfgDest = path.join(projectDir, "postcss.config.js");
 
   const prettierSrc = path.join(extrasDir, "config/_prettier.config.js");
   const prettierDest = path.join(projectDir, "prettier.config.js");
 
-  const cssSrc = path.join(extrasDir, "src/styles/globals.css");
+  const cssSrc = path.join(extrasDir, "src/styles/globals-tw.css");
   const cssDest = path.join(projectDir, "src/styles/globals.css");
 
   // add format:* scripts to package.json

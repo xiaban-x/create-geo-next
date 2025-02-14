@@ -334,7 +334,7 @@ export const runCli = async (): Promise<CliResults> => {
         if (project.mappingLib === "mapbox") packages.push("mapbox");
         if (project.mappingLib === "openLayers") packages.push("openLayers");
         if (project.mappingLib === "cesium") packages.push("cesium");
-        if (project.styling === "unocss") packages.push("tailwind");
+        if (project.styling === "unocss") packages.push("unocss");
         if (project.styling === "tailwind") packages.push("tailwind");
         if (project.database === "prisma") packages.push("prisma");
         if (project.database === "drizzle") packages.push("drizzle");
