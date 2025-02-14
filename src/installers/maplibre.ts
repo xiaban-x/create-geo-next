@@ -1,6 +1,5 @@
 import path from "path";
 import fs from "fs-extra";
-import {type PackageJson} from "type-fest";
 
 import {PKG_ROOT} from "../consts";
 import {type Installer} from "./index";
@@ -10,8 +9,6 @@ import {type AvailableDependencies} from "./dependencyVersionMap";
 export const maplibreInstaller: Installer = ({
                                                  projectDir,
                                                  packages,
-                                                 scopedAppName,
-                                                 databaseProvider,
                                              }) => {
     const devPackages: AvailableDependencies[] = [
         "maplibre-gl",
