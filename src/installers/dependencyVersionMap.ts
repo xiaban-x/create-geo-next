@@ -13,6 +13,11 @@ export const dependencyVersionMap = {
     // maplibre
     "maplibre-gl": "^5.1.0",
     "react-map-gl": "^8.0.1",
+
+    // mapbox
+    "mapbox-gl": "^3.10.0",
+    "@types/mapbox-gl": "^3.4.1",
+
     // Prisma
     prisma: "^5.14.0",
     "@prisma/client": "^5.14.0",

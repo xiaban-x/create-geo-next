@@ -13,13 +13,14 @@ export const envVariablesInstaller: Installer = ({
                                                  }) => {
     const usingPrisma = packages?.prisma.inUse;
     const usingDrizzle = packages?.drizzle.inUse;
-
+    const usingMapbox = packages?.mapbox.inUse;
     const usingDb = usingPrisma || usingDrizzle;
     const usingPlanetScale = databaseProvider === "planetscale";
 
     const envContent = getEnvContent(
         !!usingPrisma,
         !!usingDrizzle,
+        !!usingMapbox,
         databaseProvider,
         scopedAppName
     );
@@ -28,9 +29,14 @@ export const envVariablesInstaller: Installer = ({
     if (usingDb) {
         if (usingPlanetScale) {
             envFile = "with-db-planetscale.js";
+        } else if (usingMapbox) {
+            envFile = "with-db-mapbox.js";
         } else {
             envFile = "with-db.js";
         }
+    }
+    if (usingMapbox) {
+        envFile = "with-mapbox.js";
     }
 
     if (envFile !== "") {
@@ -64,6 +70,7 @@ export const envVariablesInstaller: Installer = ({
 const getEnvContent = (
     usingPrisma: boolean,
     usingDrizzle: boolean,
+    usingMapbox: boolean,
     databaseProvider: DatabaseProvider,
     scopedAppName: string
 ) => {
@@ -102,7 +109,14 @@ DATABASE_URL='mysql://YOUR_MYSQL_URL_HERE?sslaccept=strict'`;
         content += "\n";
     }
 
-    if ( !usingPrisma)
+    if (usingMapbox)
+        content += `
+# Mapbox
+# https://docs.mapbox.com/help/how-mapbox-works/access-tokens/
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN="your-mapbox-access-token"
+`;
+
+    if (!usingPrisma)
         content += `
 # Example:
 # SERVERVAR="foo"

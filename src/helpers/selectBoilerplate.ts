@@ -35,9 +35,18 @@ export const selectPageFile = ({
                                }: SelectBoilerplateProps) => {
     const indexFileDir = path.join(PKG_ROOT, "template/extras/src/app/page");
     const usingMaplibre = packages.maplibre.inUse
-    let indexFile = "base.tsx";
+    const usingMapbox = packages.mapbox.inUse;
+    const usingOpenLayers = packages.openLayers.inUse;
+    const usingCesium = packages.cesium.inUse;
+    let indexFile = "with-maplibre.tsx";
     if (usingMaplibre) {
         indexFile = "with-maplibre.tsx";
+    } else if (usingMapbox) {
+        indexFile = "with-mapbox.tsx";
+    } else if (usingOpenLayers) {
+        indexFile = "with-openlayers.tsx";
+    } else if (usingCesium) {
+        indexFile = "with-cesium.tsx";
     }
 
     const indexSrc = path.join(indexFileDir, indexFile);
