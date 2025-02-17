@@ -2,13 +2,14 @@
   "name": "create-geo-next",
   "module": "src/index.ts",
   "type": "module",
+  "exports": "./dist/index.js",
   "description": "A custom Next.js starter CLI",
   "bin": {
-    "create-geo-next": "src/index.ts"
+    "create-geo-next": "./dist/index.js"
   },
   "scripts": {
     "dev": "bun run src/index.ts",
-    "build": "bun build src/index.ts --outdir dist --target node",
+    "build": "bun build src/index.ts --outdir dist --target bun --external git-hooks-list",
     "start": "bun run dist/index.js"
   },
   "devDependencies": {
