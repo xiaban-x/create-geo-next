@@ -44,7 +44,7 @@ export const selectPageFile = ({
     } else if (usingMapbox) {
         indexFile = "with-mapbox.tsx";
     } else if (usingOpenLayers) {
-        indexFile = "with-openlayers.tsx";
+        indexFile = "with-open-layers.tsx";
     } else if (usingCesium) {
         indexFile = "with-cesium.tsx";
     }

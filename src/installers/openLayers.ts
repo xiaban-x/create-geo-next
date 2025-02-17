@@ -8,14 +8,14 @@ import {addPackageDependency} from "../utils/addPackageDependency";
 import {type AvailableDependencies} from "./dependencyVersionMap";
 
 export const openLayersInstaller: Installer = ({
-                                                projectDir,
-                                                packages,
-                                                scopedAppName,
-                                                databaseProvider,
-                                            }) => {
+                                                   projectDir,
+                                                   packages,
+                                                   scopedAppName,
+                                                   databaseProvider,
+                                               }) => {
     const devPackages: AvailableDependencies[] = [
-        "drizzle-kit",
-        "eslint-plugin-drizzle",
+        "ol",
+        "ol-ext",
     ];
 
     addPackageDependency({
@@ -23,74 +23,51 @@ export const openLayersInstaller: Installer = ({
         dependencies: devPackages,
         devMode: true,
     });
-    addPackageDependency({
-        projectDir,
-        dependencies: [
-            "drizzle-orm",
-            (
-                {
-                    planetscale: "@planetscale/database",
-                    mysql: "mysql2",
-                    postgres: "postgres",
-                    sqlite: "@libsql/client",
-                } as const
-            )[databaseProvider],
-        ],
-        devMode: false,
-    });
 
     const extrasDir = path.join(PKG_ROOT, "template/extras");
 
-    const configFile = path.join(
-        extrasDir,
-        `config/drizzle-config-${
-            databaseProvider === "planetscale" ? "mysql" : databaseProvider
-        }.ts`
+    const copySrcDest: [string, string][] = [];
+
+    copySrcDest.push(
+        [
+            path.join(
+                extrasDir,
+                "src/app/_components",
+                packages?.tailwind.inUse ? "map-open-layers-tw.tsx" : packages?.unocss.inUse ? "map-open-layers-uno.tsx" : "map-open-layers.tsx"
+            ),
+            path.join(projectDir, "src/app/_components/map-container.tsx"),
+        ],
+        [
+            path.join(
+                extrasDir,
+                "src/app/_components",
+                packages?.tailwind.inUse ? "open-layers-map1-tw.tsx" : packages?.unocss.inUse ? "open-layers-map1-uno.tsx" : "open-layers-map1.tsx"
+            ),
+            path.join(projectDir, "src/app/_components/map1.tsx"),
+        ],
+        [
+            path.join(
+                extrasDir,
+                "src/app/_components",
+                packages?.tailwind.inUse ? "open-layers-map2-tw.tsx" : packages?.unocss.inUse ? "open-layers-map2-uno.tsx" : "open-layers-map2.tsx"
+            ),
+            path.join(projectDir, "src/app/_components/map2.tsx"),
+        ],
     );
-    const configDest = path.join(projectDir, "drizzle.config.ts");
 
-    const schemaSrc = path.join(
-        extrasDir,
-        "src/server/db/schema-drizzle",
-        `base-${databaseProvider}.ts`
-    );
-    const schemaDest = path.join(projectDir, "src/server/db/schema.ts");
-
-    // Replace placeholder table prefix with project name
-    let schemaContent = fs.readFileSync(schemaSrc, "utf-8");
-    schemaContent = schemaContent.replace(
-        "project1_${name}",
-        `${scopedAppName}_\${name}`
-    );
-
-    let configContent = fs.readFileSync(configFile, "utf-8");
-
-    configContent = configContent.replace("project1_*", `${scopedAppName}_*`);
-
-    const clientSrc = path.join(
-        extrasDir,
-        `src/server/db/index-drizzle/with-${databaseProvider}.ts`
-    );
-    const clientDest = path.join(projectDir, "src/server/db/index.ts");
-
-    // add db:* scripts to package.json
-    const packageJsonPath = path.join(projectDir, "package.json");
-
-    const packageJsonContent = fs.readJSONSync(packageJsonPath) as PackageJson;
-    packageJsonContent.scripts = {
-        ...packageJsonContent.scripts,
-        "db:push": "drizzle-kit push",
-        "db:studio": "drizzle-kit studio",
-        "db:generate": "drizzle-kit generate",
-        "db:migrate": "drizzle-kit migrate",
-    };
-
-    fs.copySync(configFile, configDest);
-    fs.mkdirSync(path.dirname(schemaDest), {recursive: true});
-    fs.writeFileSync(schemaDest, schemaContent);
-    fs.writeFileSync(configDest, configContent);
-    fs.copySync(clientSrc, clientDest);
-    fs.writeJSONSync(packageJsonPath, packageJsonContent, {
-        spaces: 2,
+    if(!packages?.tailwind.inUse && !packages?.unocss.inUse){
+        copySrcDest.push(
+            [
+                path.join(
+                    extrasDir,
+                    "src/app/_components",
+                    "open-layers.css"
+                ),
+                path.join(projectDir, "src/app/_components/map.css"),
+            ],
+        );
+    }
+    copySrcDest.forEach(([src, dest]) => {
+        fs.copySync(src, dest);
     });
 };

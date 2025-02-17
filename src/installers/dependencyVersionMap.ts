@@ -18,6 +18,10 @@ export const dependencyVersionMap = {
     "mapbox-gl": "^3.10.0",
     "@types/mapbox-gl": "^3.4.1",
 
+    // openLayers
+    ol: "^10.4.0",
+    "ol-ext": "^4.0.26",
+
     // Prisma
     prisma: "^5.14.0",
     "@prisma/client": "^5.14.0",
