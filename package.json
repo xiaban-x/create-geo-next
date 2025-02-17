@@ -5,7 +5,7 @@
   "exports": "./dist/index.js",
   "description": "A custom Next.js starter CLI",
   "bin": {
-    "create-geo-next": "./dist/index.js"
+    "create-geo-next": "dist/index.js"
   },
   "scripts": {
     "dev": "bun run src/index.ts",
@@ -30,5 +30,6 @@
     "gradient-string": "^2.0.2",
     "ora": "6.3.1",
     "sort-package-json": "^2.10.0"
-  }
+  },
+  "version": "1.0.0"
 }
