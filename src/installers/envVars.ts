@@ -14,6 +14,7 @@ export const envVariablesInstaller: Installer = ({
     const usingPrisma = packages?.prisma.inUse;
     const usingDrizzle = packages?.drizzle.inUse;
     const usingMapbox = packages?.mapbox.inUse;
+    const usingCesium = packages?.cesium.inUse;
     const usingDb = usingPrisma || usingDrizzle;
     const usingPlanetScale = databaseProvider === "planetscale";
 
@@ -21,6 +22,7 @@ export const envVariablesInstaller: Installer = ({
         !!usingPrisma,
         !!usingDrizzle,
         !!usingMapbox,
+        !!usingCesium,
         databaseProvider,
         scopedAppName
     );
@@ -31,12 +33,17 @@ export const envVariablesInstaller: Installer = ({
             envFile = "with-db-planetscale.js";
         } else if (usingMapbox) {
             envFile = "with-db-mapbox.js";
+        } else if (usingCesium) {
+            envFile = "with-db-cesium.js";
         } else {
             envFile = "with-db.js";
         }
     }
     if (usingMapbox) {
         envFile = "with-mapbox.js";
+    }
+    if (usingCesium) {
+        envFile = "with-cesium.js";
     }
 
     if (envFile !== "") {
@@ -71,6 +78,7 @@ const getEnvContent = (
     usingPrisma: boolean,
     usingDrizzle: boolean,
     usingMapbox: boolean,
+    usingCesium: boolean,
     databaseProvider: DatabaseProvider,
     scopedAppName: string
 ) => {
@@ -115,7 +123,12 @@ DATABASE_URL='mysql://YOUR_MYSQL_URL_HERE?sslaccept=strict'`;
 # https://docs.mapbox.com/help/how-mapbox-works/access-tokens/
 NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN="your-mapbox-access-token"
 `;
-
+    if (usingCesium)
+        content += `
+# Cesium
+# https://cesium.com/learn/cesiumjs/ref-doc/Cesium.Ion.html?classFilter=ion
+NEXT_PUBLIC_CESIUM_TOKEN="your-cesium-token"
+`;
     if (!usingPrisma)
         content += `
 # Example:

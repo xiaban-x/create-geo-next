@@ -56,7 +56,9 @@ export const createProject = async ({
 
     // Replace next.config
     fs.copyFileSync(
-        path.join(PKG_ROOT, "template/extras/config/next-config-appdir.ts"),
+        packages.cesium.inUse
+            ? path.join(PKG_ROOT, "template/extras/config/next-config-cesium.ts")
+            : path.join(PKG_ROOT, "template/base/config/next-config.ts"),
         path.join(projectDir, "next.config.ts")
     );
 

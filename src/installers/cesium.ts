@@ -14,8 +14,7 @@ export const cesiumInstaller: Installer = ({
                                                 databaseProvider,
                                             }) => {
     const devPackages: AvailableDependencies[] = [
-        "drizzle-kit",
-        "eslint-plugin-drizzle",
+        "copy-webpack-plugin",
     ];
 
     addPackageDependency({
@@ -23,74 +22,66 @@ export const cesiumInstaller: Installer = ({
         dependencies: devPackages,
         devMode: true,
     });
+
     addPackageDependency({
         projectDir,
-        dependencies: [
-            "drizzle-orm",
-            (
-                {
-                    planetscale: "@planetscale/database",
-                    mysql: "mysql2",
-                    postgres: "postgres",
-                    sqlite: "@libsql/client",
-                } as const
-            )[databaseProvider],
-        ],
+        dependencies: ["cesium"],
         devMode: false,
-    });
+    })
 
-    const extrasDir = path.join(PKG_ROOT, "template/extras");
-
-    const configFile = path.join(
-        extrasDir,
-        `config/drizzle-config-${
-            databaseProvider === "planetscale" ? "mysql" : databaseProvider
-        }.ts`
-    );
-    const configDest = path.join(projectDir, "drizzle.config.ts");
-
-    const schemaSrc = path.join(
-        extrasDir,
-        "src/server/db/schema-drizzle",
-        `base-${databaseProvider}.ts`
-    );
-    const schemaDest = path.join(projectDir, "src/server/db/schema.ts");
-
-    // Replace placeholder table prefix with project name
-    let schemaContent = fs.readFileSync(schemaSrc, "utf-8");
-    schemaContent = schemaContent.replace(
-        "project1_${name}",
-        `${scopedAppName}_\${name}`
-    );
-
-    let configContent = fs.readFileSync(configFile, "utf-8");
-
-    configContent = configContent.replace("project1_*", `${scopedAppName}_*`);
-
-    const clientSrc = path.join(
-        extrasDir,
-        `src/server/db/index-drizzle/with-${databaseProvider}.ts`
-    );
-    const clientDest = path.join(projectDir, "src/server/db/index.ts");
-
-    // add db:* scripts to package.json
     const packageJsonPath = path.join(projectDir, "package.json");
 
     const packageJsonContent = fs.readJSONSync(packageJsonPath) as PackageJson;
-    packageJsonContent.scripts = {
-        ...packageJsonContent.scripts,
-        "db:push": "drizzle-kit push",
-        "db:studio": "drizzle-kit studio",
-        "db:generate": "drizzle-kit generate",
-        "db:migrate": "drizzle-kit migrate",
-    };
-
-    fs.copySync(configFile, configDest);
-    fs.mkdirSync(path.dirname(schemaDest), {recursive: true});
-    fs.writeFileSync(schemaDest, schemaContent);
-    fs.writeFileSync(configDest, configContent);
-    fs.copySync(clientSrc, clientDest);
+    if(packageJsonContent.scripts?.dev){
+        packageJsonContent.scripts.dev = packageJsonContent.scripts.dev.replace(" --turbo", "")
+    }
     fs.writeJSONSync(packageJsonPath, packageJsonContent, {
         spaces: 2,
+    });
+    const extrasDir = path.join(PKG_ROOT, "template/extras");
+    const copySrcDest: [string, string][] = [];
+
+    copySrcDest.push(
+        [
+            path.join(
+                extrasDir,
+                "src/app/_components/map-cesium.tsx",
+            ),
+            path.join(projectDir, "src/app/_components/map-container.tsx"),
+        ],
+        [
+            path.join(
+                extrasDir,
+                "src/app/_components/cesium-wrapper.tsx",
+            ),
+            path.join(projectDir, "src/app/_components/cesium-wrapper.tsx"),
+        ],
+        [
+            path.join(
+                extrasDir,
+                "src/app/_components",
+                packages?.tailwind.inUse ? "cesium-component-tw.tsx" : packages?.unocss.inUse ? "cesium-component-uno.tsx" : "cesium-component.tsx"
+            ),
+            path.join(projectDir, "src/app/_components/cesium-component.tsx"),
+        ],
+        [
+            path.join(
+                extrasDir,
+                "src/types/cesium.ts"
+            ),
+            path.join(projectDir, "src/app/_types/cesium.ts")
+        ],
+        [
+            path.join(
+                extrasDir,
+                "src/types/cesium-position.ts"
+            ),
+            path.join(projectDir, "src/app/_types/position.ts")
+        ],
+
+    );
+
+    copySrcDest.forEach(([src, dest]) => {
+        fs.copySync(src, dest);
     });
 };

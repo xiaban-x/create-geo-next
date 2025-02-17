@@ -22,6 +22,10 @@ export const dependencyVersionMap = {
     ol: "^10.4.0",
     "ol-ext": "^4.0.26",
 
+    // cesium
+    cesium: "^1.126.0",
+    "copy-webpack-plugin": "^12.0.2",
+
     // Prisma
     prisma: "^5.14.0",
     "@prisma/client": "^5.14.0",
