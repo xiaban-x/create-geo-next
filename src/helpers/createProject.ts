@@ -63,20 +63,5 @@ export const createProject = async ({
     selectLayoutFile({projectDir, packages});
     selectPageFile({projectDir, packages});
 
-    // If no tailwind, select use css modules
-    if (!packages.tailwind.inUse) {
-        const indexModuleCss = path.join(
-            PKG_ROOT,
-            "template/extras/src/index.module.css"
-        );
-        const indexModuleCssDest = path.join(
-            projectDir,
-            "src",
-            "app",
-            "index.module.css"
-        );
-        fs.copyFileSync(indexModuleCss, indexModuleCssDest);
-    }
-
     return projectDir;
 };
